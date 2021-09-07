@@ -1,3 +1,5 @@
+using System;
+
 namespace PlanYourHeistII
 {
     public class Muscle : IRobber
@@ -8,8 +10,9 @@ namespace PlanYourHeistII
 
         public void PerformSkill(Bank bank)
         {
-            bank -= SkillLevel;
-            Console.WriteLine($"{Name} is confronting the security guards! Decreased guard score security by {SkillLevel} points!");
+            bank.SecurityGuardScore -= SkillLevel;
+            Console.WriteLine($@"{Name} is confronting the security guards! Decreased guard score security by {SkillLevel} points!
+                If heist is successful, {Name}'s percentage cut will be {PercentageCut}!");
             if (bank.SecurityGuardScore <= 0)
             {
                 Console.WriteLine($"{Name} has demolished the security guards! :O");
