@@ -26,6 +26,19 @@ namespace PlanYourHeistII
 ||====================================================================||
             ");
 
+            // instantiating new bank class:
+            Bank chase = new Bank()
+            {
+                AlarmScore = new Random().Next(101),
+                VaultScore = new Random().Next(101),
+                SecurityGuardScore = new Random().Next(101),
+                CashOnHand = new Random().Next(50000, 1000001)
+            };
+
+            // Recon report:
+            Bank.runReconReport(chase.AlarmScore, chase.VaultScore, chase.SecurityGuardScore);
+
+            // creating rolodex list of initial team of robbers:
             List<IRobber> rolodex = new List<IRobber>()
             {
                 new Hacker() { Name = "Bonnie", SkillLevel = 50, PercentageCut = 20 },
@@ -44,17 +57,22 @@ namespace PlanYourHeistII
             int memberSkillLevel = 0;
             int memberCut = 0;
             bool addNewMember = true;
+            int counter = 0; // counter for displaying index of each operative; could also use IndexOf property while in a foreach loop
 
-            // method to create a new member and add to rolodex list; while loop will continue prompting user to input corresponding
-            // values until member decides not to add a new member to rolodex:
+            // method that prompts user for input to create a new member and add to rolodex list; while loop will continue prompting user 
+            // to input corresponding values until member decides not to add a new member to rolodex:
             void createMember()
             {
-                while(memberName == "") {
+                while (memberName == "")
+                {
+                    Console.WriteLine();
                     Console.Write("Please enter the name of a new possible crew member: ");
                     memberName = Console.ReadLine();
+                    // userInput = Console.ReadLine();
+                    // memberName = userInput;
                 }
 
-                while (memberSpecialty == 0)
+                while (memberSpecialty <= 0)
                 {
 
                     Console.WriteLine($@"
@@ -74,7 +92,7 @@ namespace PlanYourHeistII
                     }
                 }
 
-                while (memberSkillLevel == 0)
+                while (memberSkillLevel <= 0)
                 {
 
                     Console.Write("Please enter member's skill level (between 1 and 100): ");
@@ -89,7 +107,7 @@ namespace PlanYourHeistII
                     }
                 }
 
-                while (memberCut == 0)
+                while (memberCut <= 0)
                 {
 
                     Console.Write("Please enter member's desired percentage cut for the mission: ");
@@ -108,62 +126,103 @@ namespace PlanYourHeistII
                 {
                     if (memberSpecialty == 1)
                     {
-                        var newTeamMember = new Hacker() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut};
-                        rolodex.Add(newTeamMember);
-                        memberName = "";
-                        memberSkillLevel = 0;
-                        memberSpecialty = 0;
-                        memberCut = 0;
-                    } 
+                        var newMember = new Hacker() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut };
+                        rolodex.Add(newMember);
+                    }
                     else if (memberSpecialty == 2)
                     {
-                        var newTeamMember = new Muscle() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut};
-                        rolodex.Add(newTeamMember);
-                        memberName = "";
-                        memberSkillLevel = 0;
-                        memberSpecialty = 0;
-                        memberCut = 0;
+                        var newMember = new Muscle() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut };
+                        rolodex.Add(newMember);
                     }
                     else if (memberSpecialty == 3)
                     {
-                        var newTeamMember = new LockSpecialist() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut};
-                        rolodex.Add(newTeamMember);
-                        memberName = "";
-                        memberSkillLevel = 0;
-                        memberSpecialty = 0;
-                        memberCut = 0;
+                        var newMember = new LockSpecialist() { Name = memberName, SkillLevel = memberSkillLevel, PercentageCut = memberCut };
+                        rolodex.Add(newMember);
                     }
-                   
-                    Console.WriteLine();
-                    Console.Write("Would you like to add a new member to the team? (Y/N): ");
-                    Console.WriteLine();
-                    userInput = Console.ReadLine().ToLower();
-                    if (userInput == "y")
-                    {
-                        addNewMember = true;
-                    }
-                    else
-                    {
-                        addNewMember = false;
-                    }
+
+                    // Prompt user to add new member or not:
+                    // Console.WriteLine();
+                    // Console.Write("Would you like to add a new member to the team? (Y/N): ");
+                    // Console.WriteLine();
+                    // userInput = Console.ReadLine().ToLower();
+                    // if (userInput == "y")
+                    // {
+                    //     addNewMember = true;
+                    // }
+                    // else
+                    // {
+                    //     addNewMember = false;
+                    // }
+
+                    // reset properties  to initial values:
+                    memberName = "";
+                    memberSkillLevel = 0;
+                    memberSpecialty = 0;
+                    memberCut = 0;
                 }
             }
-            
+
+            // Will create new member so long as variable is true:
             while (addNewMember)
             {
-                createMember();
+                Console.WriteLine();
+                Console.Write("Would you like to add a new member to the crew? (Y/N): ");
+                Console.WriteLine();
+                userInput = Console.ReadLine().ToLower();
+
+                if (userInput == "y")
+                {
+                    createMember();
+                }
+                else
+                {
+                    break;
+                }
             }
 
-            // Priting updated count and rolodex info:
-            Console.WriteLine($"Number of Current Operatives: {rolodex.Count}");
+            // Printing updated count and rolodex info:
+            Console.WriteLine("---------------------------------------------");
             Console.WriteLine();
             Console.WriteLine("Robber Team Info:");
             Console.WriteLine();
+            Console.WriteLine($"Number of Current Operatives: {rolodex.Count}");
+
+            // Printing info of each robber in list and updating counter value for index:
             foreach (IRobber robber in rolodex)
             {
-                Console.WriteLine($"{robber.Name}'s skill level is {robber.SkillLevel} with {robber.PercentageCut}% of the cut.");
+                Console.WriteLine($"{counter} {robber.Name}'s skill level is {robber.SkillLevel} with {robber.PercentageCut}% of the cut. Specialty is {robber.Specialty}.");
+                counter++;
             }
-            
+
+            List<IRobber> crew = new List<IRobber>() { };
+
+            // Prompting user to add a member to crew:
+            while (true)
+            {
+                Console.WriteLine();
+                Console.Write("Please enter the number of the operative to add to your crew: ");
+                int input = int.Parse(Console.ReadLine());
+                crew.Add(rolodex[input]);
+
+                Console.Write("Would you like to add another member to your crew? (Y/N): ");
+                Console.WriteLine();
+                string answer = Console.ReadLine().ToLower();
+
+                if (answer != "y")
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine($"Number of Current Operatives in Crew: {crew.Count}");
+            Console.WriteLine();
+            foreach (IRobber robber in crew)
+            {
+                Console.WriteLine($"{robber.Name}'s skill level is {robber.SkillLevel} with {robber.PercentageCut}% of the cut. Specialty is {robber.Specialty}.");
+            }
+
         }
     }
 }
