@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+// using System.Linq;
 
 namespace PlanYourHeistII
 {
@@ -38,15 +39,15 @@ namespace PlanYourHeistII
             // Recon report:
             Bank.runReconReport(chase.AlarmScore, chase.VaultScore, chase.SecurityGuardScore);
 
-            // creating rolodex list of initial team of robbers:
+            // Creating rolodex list of initial team of robbers:
             List<IRobber> rolodex = new List<IRobber>()
             {
-                new Hacker() { Name = "Bonnie", SkillLevel = 50, PercentageCut = 20 },
-                new Muscle() { Name = "Clyde", SkillLevel = 60, PercentageCut = 15 },
-                new LockSpecialist() { Name = "Penguin", SkillLevel = 70, PercentageCut = 25 },
-                new Hacker() { Name = "Joker", SkillLevel = 80, PercentageCut = 15 },
-                new Muscle() { Name = "Harley", SkillLevel = 45, PercentageCut = 15 },
-                new LockSpecialist() { Name = "Robbie", SkillLevel = 30, PercentageCut = 10 },
+                new Hacker() { Name = "Bonnie", SkillLevel = 65, PercentageCut = 50 },
+                new Muscle() { Name = "Clyde", SkillLevel = 60, PercentageCut = 30 },
+                new LockSpecialist() { Name = "Penguin", SkillLevel = 70, PercentageCut = 20 },
+                new Hacker() { Name = "Joker", SkillLevel = 80, PercentageCut = 50 },
+                new Muscle() { Name = "Harley", SkillLevel = 75, PercentageCut = 30 },
+                new LockSpecialist() { Name = "Robbie", SkillLevel = 90, PercentageCut = 20 },
             };
 
             Console.WriteLine($"Number of Current Operatives: {rolodex.Count}");
@@ -140,20 +141,6 @@ namespace PlanYourHeistII
                         rolodex.Add(newMember);
                     }
 
-                    // Prompt user to add new member or not:
-                    // Console.WriteLine();
-                    // Console.Write("Would you like to add a new member to the team? (Y/N): ");
-                    // Console.WriteLine();
-                    // userInput = Console.ReadLine().ToLower();
-                    // if (userInput == "y")
-                    // {
-                    //     addNewMember = true;
-                    // }
-                    // else
-                    // {
-                    //     addNewMember = false;
-                    // }
-
                     // reset properties  to initial values:
                     memberName = "";
                     memberSkillLevel = 0;
@@ -165,6 +152,7 @@ namespace PlanYourHeistII
             // Will create new member so long as variable is true:
             while (addNewMember)
             {
+                // Prompt user to add new member or not:
                 Console.WriteLine();
                 Console.Write("Would you like to add a new member to the crew? (Y/N): ");
                 Console.WriteLine();
@@ -204,6 +192,9 @@ namespace PlanYourHeistII
                 int input = int.Parse(Console.ReadLine());
                 crew.Add(rolodex[input]);
 
+                // Removing operative from rolodex after adding member to crew so user cannot add the same robber to crew list:
+                // rolodex.Remove(rolodex[input]);
+
                 Console.Write("Would you like to add another member to your crew? (Y/N): ");
                 Console.WriteLine();
                 string answer = Console.ReadLine().ToLower();
@@ -214,15 +205,42 @@ namespace PlanYourHeistII
                 }
             }
 
+            // Printing member info in crew list:
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine();
             Console.WriteLine($"Number of Current Operatives in Crew: {crew.Count}");
             Console.WriteLine();
+
+            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("Let the heist begin! :O");
+            Console.WriteLine();
+
             foreach (IRobber robber in crew)
             {
                 Console.WriteLine($"{robber.Name}'s skill level is {robber.SkillLevel} with {robber.PercentageCut}% of the cut. Specialty is {robber.Specialty}.");
             }
 
+            // Starting the heist to evaluate if mission is successful or not:
+            foreach (IRobber member in crew)
+            {
+                member.PerformSkill(chase);
+            }
+
+            if (chase.isSecure)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Oh, no! Your team failed the mission and got caught!");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Yay! The crew successfully completed the mission!");
+                Console.WriteLine();
+                foreach (IRobber member in crew)
+                {
+                    Console.WriteLine($"{member.Name}'s cut from the heist is {(member.PercentageCut * chase.CashOnHand) / 100}!");
+                }
+            }
         }
     }
 }

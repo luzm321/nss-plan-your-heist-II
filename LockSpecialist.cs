@@ -12,12 +12,12 @@ namespace PlanYourHeistII
         public void PerformSkill(Bank bank)
         {
             bank.VaultScore -= SkillLevel;
-            Console.WriteLine($@"{Name} is cracking the vault! Decreased vault score security by {SkillLevel} points!
-                If heist is successful, {Name}'s percentage cut will be {PercentageCut}!");
+            Console.WriteLine($@"{Name} is cracking the vault! Decreased vault score security by {SkillLevel} points! 
+            If heist is successful, {Name}'s cut will be {PercentageCut}%!");
 
             if (bank.VaultScore <= 0)
             {
-                Console.WriteLine($"{Name} has deciphered the vault! :O");
+                Console.WriteLine($"{Name} has deciphered the vault! :D");
             }
         }
     }

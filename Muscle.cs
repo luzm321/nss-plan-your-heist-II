@@ -13,11 +13,11 @@ namespace PlanYourHeistII
         {
             bank.SecurityGuardScore -= SkillLevel;
             Console.WriteLine($@"{Name} is confronting the security guards! Decreased guard score security by {SkillLevel} points!
-                If heist is successful, {Name}'s percentage cut will be {PercentageCut}!");
+            If heist is successful, {Name}'s cut will be {PercentageCut}%!");
 
             if (bank.SecurityGuardScore <= 0)
             {
-                Console.WriteLine($"{Name} has demolished the security guards! :O");
+                Console.WriteLine($"{Name} has demolished the security guards! :D");
             }
         }
     }
